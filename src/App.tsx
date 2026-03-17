@@ -68,8 +68,8 @@ function Encoder() {
       
       // 3. Create download URL
       setDownloadUrl(URL.createObjectURL(modifiedImageBlob));
-    } catch (err: any) {
-      setError(err.message || "Error encoding the image.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error encoding the image.");
     } finally {
       setIsProcessing(false);
     }
@@ -159,9 +159,9 @@ function Decoder() {
       const decryptedText = decryptMessage(encryptedText, privateKey);
       
       setRevealedMessage(decryptedText);
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.message || "Decryption failed. The private key doesn't match or no hidden message exists.");
+      setError(err instanceof Error ? err.message : "Decryption failed. The private key doesn't match or no hidden message exists.");
     } finally {
       setIsProcessing(false);
     }
