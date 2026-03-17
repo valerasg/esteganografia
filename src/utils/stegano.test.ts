@@ -3,7 +3,7 @@ import { embedDataInImage, extractDataFromImage } from './stegano';
 
 // Mocking the canvas and image operations because jsdom doesn't support them fully
 vi.mock('./stegano', () => ({
-  embedDataInImage: vi.fn(async (image: File, data: string) => {
+  embedDataInImage: vi.fn(async (_image: File, data: string) => {
     return new Blob([data], { type: 'image/png' });
   }),
   extractDataFromImage: vi.fn(async (image: File) => {

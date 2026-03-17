@@ -1,3 +1,27 @@
+interface ImageDataInfo {
+  imageData: ImageData;
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+}
+
+async function getImageContext(imageFile: File): Promise<ImageDataInfo> {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  if (!ctx) throw new Error('Canvas 2D context not available');
+
+  const image = await loadImage(imageFile);
+  canvas.width = image.width;
+  canvas.height = image.height;
+  ctx.drawImage(image, 0, 0);
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  return {
+    imageData,
+    canvas,
+    ctx,
+  };
+}
+
 export async function embedDataInImage(imageFile: File, payloadStr: string): Promise<Blob> {
   // Convert the Base64 payload string to a byte array
   const encoder = new TextEncoder();
@@ -15,16 +39,7 @@ export async function embedDataInImage(imageFile: File, payloadStr: string): Pro
   totalBytes.set(payloadBytes, lengthBytes.length);
 
   // Load image onto a canvas
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  if (!ctx) throw new Error('Canvas 2D context not available');
-
-  const image = await loadImage(imageFile);
-  canvas.width = image.width;
-  canvas.height = image.height;
-  ctx.drawImage(image, 0, 0);
-
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const { imageData, canvas, ctx } = await getImageContext(imageFile);
   const data = imageData.data;
 
   // Max capacity: 3 color channels per pixel (skipping Alpha), 8 bits per byte
@@ -71,16 +86,7 @@ export async function embedDataInImage(imageFile: File, payloadStr: string): Pro
 }
 
 export async function extractDataFromImage(imageFile: File): Promise<string> {
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  if (!ctx) throw new Error('Canvas 2D context not available');
-
-  const image = await loadImage(imageFile);
-  canvas.width = image.width;
-  canvas.height = image.height;
-  ctx.drawImage(image, 0, 0);
-
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const { imageData } = await getImageContext(imageFile);
   const data = imageData.data;
 
   let p = 0; // index traversing the imageData.data array
