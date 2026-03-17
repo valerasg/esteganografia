@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import App from './App';
 
 describe('App Component', () => {
@@ -11,7 +11,7 @@ describe('App Component', () => {
   it('toggles theme when the theme button is clicked', () => {
     render(<App />);
     const themeButton = screen.getByLabelText(/Toggle Theme/i);
-    
+
     // Default theme is dark
     expect(document.documentElement.classList.contains('dark')).toBe(true);
 
@@ -26,7 +26,7 @@ describe('App Component', () => {
 
   it('switches between Hide and Reveal tabs', () => {
     render(<App />);
-    
+
     const revealTabButton = screen.getByText(/Reveal Message \(Decode\)/i);
     const hideTabButton = screen.getByText(/Hide Message \(Encode\)/i);
 
