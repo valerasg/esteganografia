@@ -27,23 +27,23 @@ describe('App Component', () => {
   it('switches between Hide and Reveal tabs', () => {
     render(<App />);
 
-    const revealTabButton = screen.getByText(/Reveal Message \(Decode\)/i);
-    const hideTabButton = screen.getByText(/Hide Message \(Encode\)/i);
+    const revealTabButton = screen.getByText(/Extract & Reveal/i);
+    const hideTabButton = screen.getByText(/Encrypt & Hide/i);
 
     // Initially on Encode tab
-    expect(screen.getByText(/Hide a Message/i)).toBeInTheDocument();
+    expect(screen.getByText(/Hide a Secret Message/i)).toBeInTheDocument();
 
     // Switch to Decode
     fireEvent.click(revealTabButton);
-    expect(screen.getByText(/Reveal a Message/i)).toBeInTheDocument();
+    expect(screen.getByText(/Reveal a Secret Message/i)).toBeInTheDocument();
 
     // Switch back to Encode
     fireEvent.click(hideTabButton);
-    expect(screen.getByText(/Hide a Message/i)).toBeInTheDocument();
+    expect(screen.getByText(/Hide a Secret Message/i)).toBeInTheDocument();
   });
 
   it('renders the key generator toolkit', () => {
     render(<App />);
-    expect(screen.getByText(/Testing Toolkit: Generate Keys/i)).toBeInTheDocument();
+    expect(screen.getByText(/Testing Toolkit/i)).toBeInTheDocument();
   });
 });
