@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { generateKeyPair, encryptMessage, decryptMessage } from './crypto';
 
 describe('Crypto Utils', () => {
@@ -21,12 +21,14 @@ describe('Crypto Utils', () => {
   });
 
   it('should throw an error when decrypting with the wrong private key', () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const message = 'Secret';
     const keys1 = generateKeyPair();
     const keys2 = generateKeyPair();
     
     const encrypted = encryptMessage(message, keys1.publicKey);
     expect(() => decryptMessage(encrypted, keys2.privateKey)).toThrow();
+    errorSpy.mockRestore();
   });
 
   it('should handle special characters and long messages', () => {
