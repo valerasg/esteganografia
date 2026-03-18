@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { encryptMessage } from '../utils/crypto';
 import { embedDataInImage } from '../utils/stegano';
 import { SectionTitle } from './SectionTitle';
@@ -12,6 +12,17 @@ export function Encoder() {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (image) {
+      const url = URL.createObjectURL(image);
+      setImagePreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setImagePreviewUrl(null);
+    }
+  }, [image]);
 
   async function handleProcess() {
     if (!image || !message || !publicKey) return;
@@ -47,6 +58,12 @@ export function Encoder() {
           onChange={setImage}
           selectedFileName={image?.name}
         />
+        {imagePreviewUrl && (
+          <div className="mt-6 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-inner border border-gray-100 dark:border-gray-800 animate-fade-in-up">
+            <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider text-center">Original Cover Image</p>
+            <img src={imagePreviewUrl} alt="Original Cover" className="max-h-64 object-contain mx-auto rounded-lg shadow-sm" />
+          </div>
+        )}
       </div>
 
       <div className="bg-gray-50/50 dark:bg-gray-800/40 p-6 rounded-2xl border border-gray-100 dark:border-gray-700/50">
@@ -108,6 +125,10 @@ export function Encoder() {
           <p className="text-sm font-semibold text-green-700/70 dark:text-green-400/70 mt-4 text-center max-w-sm">
             ⚠️ Warning: Do not convert this image to JPEG or compress it, or the hidden data will be destroyed.
           </p>
+          <div className="mt-8 w-full bg-white/50 dark:bg-black/20 p-4 rounded-xl">
+             <p className="text-xs font-bold text-green-700/80 dark:text-green-400/80 mb-3 uppercase tracking-wider text-center">Encoded Result (Visual Check)</p>
+             <img src={downloadUrl} alt="Encoded Result" className="max-h-64 object-contain mx-auto rounded-lg shadow-sm border border-green-300 dark:border-green-700/50" />
+          </div>
         </div>
       )}
     </div>

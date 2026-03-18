@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { decryptMessage } from '../utils/crypto';
 import { extractDataFromImage } from '../utils/stegano';
 import { SectionTitle } from './SectionTitle';
@@ -11,6 +11,17 @@ export function Decoder() {
   const [revealedMessage, setRevealedMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (image) {
+      const url = URL.createObjectURL(image);
+      setImagePreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setImagePreviewUrl(null);
+    }
+  }, [image]);
 
   async function handleDecode() {
     if (!image || !privateKey) return;
@@ -46,6 +57,12 @@ export function Decoder() {
           onChange={setImage}
           selectedFileName={image?.name}
         />
+        {imagePreviewUrl && (
+          <div className="mt-6 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-inner border border-gray-100 dark:border-gray-800 animate-fade-in-up">
+            <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider text-center">Encoded Image Preview</p>
+            <img src={imagePreviewUrl} alt="Encoded Image" className="max-h-64 object-contain mx-auto rounded-lg shadow-sm" />
+          </div>
+        )}
       </div>
 
       <div className="bg-gray-50/50 dark:bg-gray-800/40 p-6 rounded-2xl border border-gray-100 dark:border-gray-700/50">
