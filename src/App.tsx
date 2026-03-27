@@ -26,58 +26,52 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 font-sans transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300 selection:bg-blue-100 selection:dark:bg-blue-900/40">
       
       <Navbar theme={theme} toggleTheme={toggleTheme} />
 
-      <main className="flex-grow w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col items-center">
+      <main className="flex-grow w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col items-center">
         
-        {/* Premium Hero Slice */}
-        <section className="text-center mb-16 mt-4 opacity-0 animate-fade-in-up" style={{ animation: 'fadeInUp 0.8s ease-out forwards' }}>
-          <div className="inline-block mb-4 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider shadow-sm">
+        {/* Minimalist Hero Section */}
+        <section className="text-center mb-16 mt-4">
+          <div className="inline-block mb-6 px-3 py-1.5 rounded bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-widest border border-gray-200 dark:border-gray-800">
             Client-Side Privacy
           </div>
-          <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 mb-6 tracking-tight drop-shadow-sm">
+          <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 tracking-tight">
             Hide Secrets in Plain Sight
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed font-medium">
             Military-grade RSA encryption seamlessly merged with advanced image steganography. Keep your sensitive communications completely invisible.
           </p>
         </section>
 
         {/* Tool Tabs */}
         <div className="w-full">
-          <div className="flex justify-center space-x-2 mb-8">
+          <div className="flex justify-center space-x-4 mb-8">
             <button
               onClick={() => setActiveTab('ENCODE')}
-              className={`px-8 py-3 rounded-xl font-bold transition-all duration-200 transform hover:scale-105 active:scale-95 ${
+              className={`px-8 py-3 rounded-lg font-semibold transition-colors duration-200 ${
                 activeTab === 'ENCODE' 
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg relative overflow-hidden' 
-                  : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700 shadow-sm border border-gray-200 dark:border-gray-700'
+                  ? 'bg-black text-white dark:bg-white dark:text-black border border-transparent' 
+                  : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800'
               }`}
             >
-              {activeTab === 'ENCODE' && (
-                <span className="absolute inset-0 w-full h-full bg-white/20 blur-md transform -rotate-45 translate-x-[-150%] animate-[shine_3s_ease-out_infinite]"></span>
-              )}
               Encrypt & Hide
             </button>
             <button
               onClick={() => setActiveTab('DECODE')}
-              className={`px-8 py-3 rounded-xl font-bold transition-all duration-200 transform hover:scale-105 active:scale-95 ${
+              className={`px-8 py-3 rounded-lg font-semibold transition-colors duration-200 ${
                 activeTab === 'DECODE' 
-                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg relative overflow-hidden' 
-                  : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-purple-500 hover:bg-purple-50 dark:hover:bg-gray-700 shadow-sm border border-gray-200 dark:border-gray-700'
+                  ? 'bg-black text-white dark:bg-white dark:text-black border border-transparent' 
+                  : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800'
               }`}
             >
-              {activeTab === 'DECODE' && (
-                <span className="absolute inset-0 w-full h-full bg-white/20 blur-md transform -rotate-45 translate-x-[-150%] animate-[shine_3s_ease-out_infinite]"></span>
-              )}
               Extract & Reveal
             </button>
           </div>
 
           {/* Tool Container */}
-          <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/20 dark:border-gray-800/50 transition-all duration-300">
+          <div className="bg-white dark:bg-gray-950 p-8 rounded-2xl border border-gray-200 dark:border-gray-800">
             {activeTab === 'ENCODE' ? <Encoder /> : <Decoder />}
           </div>
           
@@ -89,19 +83,6 @@ function App() {
       </main>
 
       <Footer />
-      
-      {/* Animations via pure Tailwind arbitrarily configured (or standard styles injected) */}
-      <style>{`
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes shine {
-          0% { transform: translateX(-150%) skewX(-15deg); }
-          50% { transform: translateX(150%) skewX(-15deg); }
-          100% { transform: translateX(150%) skewX(-15deg); }
-        }
-      `}</style>
     </div>
   );
 }
